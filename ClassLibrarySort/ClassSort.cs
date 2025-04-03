@@ -8,5 +8,6 @@ namespace ClassLibrarySort
 {
     public class ClassSort
     {
+
     }
 }
