@@ -258,30 +258,41 @@ namespace ClassLibrarySort
                 }
             }
 
-            if (vect) 
+            if (vect)
                 Array.Reverse(MAS);
 
             return MAS;
         }
 
+        /// <summary>
+        /// Сортировка элементов четырех типов
+        /// </summary>
+        /// <param name="MAS">целочисленный массив</param>
+        /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
+        /// <returns>отсортированный массив</returns>
         public static int[] FourSort(int[] MAS, bool vect = false)
         {
             int[] uni = BubbleSort(MAS.ToList().Distinct().ToArray());
             int low, mid1, mid2, high;
-            if (uni.Length == 4)
+
+            switch (uni.Length)
             {
-                low = uni[0];
-                mid1 = uni[1];
-                mid2 = uni[2];
-                high = uni[3];
+                case 1:
+                    return MAS;
+                    break;
+                case 2:
+                    return TwoSort(MAS, vect);
+                    break;
+                case 3:
+                    return ThreeSort(MAS, vect);
+                    break;
             }
-            else
-            {
-                low = uni.Min();
-                high = uni.Max();
-                mid1 = Math.Abs(uni.Sum() - low - high);
-                mid2 = mid1;
-            }
+
+            low = uni[0];
+            mid1 = uni[1];
+            mid2 = uni[2];
+            high = uni[3];
+
 
             int left = 0;
             int left_mid = 0;
@@ -318,6 +329,9 @@ namespace ClassLibrarySort
                     right--;
                 }
             }
+
+            if (vect)
+                Array.Reverse(MAS);
 
             return MAS;
         }
