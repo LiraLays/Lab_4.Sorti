@@ -10,8 +10,8 @@ namespace ConsoleSort
     {
         static void Main(string[] args)
         {
-            int[] mas = { 9 };//, 8, 7, 6, 5, 4, 5, 6, 7};
-            foreach (int a in ClassSort.CountSort(mas, true))
+            int[] mas = { 0,0,0,0,1,1,1,1};
+            foreach (int a in ClassSort.TwoSort(mas, true))
                 Console.Write("{0} ", a);
         }
     }

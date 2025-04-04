@@ -1,47 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassLibrarySort
 {
     public class ClassSort
     {
         /// <summary>
+        /// Смена значений местами
+        /// </summary>
+        /// <param name="MAS">целочисленный массив</param>
+        /// <param name="left">первый индекс для смены значений в массиве</param>
+        /// <param name="right">второй индекс для смены значений в массиве</param>
+        private static void Swap(int[] MAS, int left, int right)
+        {
+            int temp = MAS[left];
+            MAS[left] = MAS[right];
+            MAS[right] = temp;
+        }
+
+        /// <summary>
         /// Сортировка методом Пузырька
         /// </summary>
         /// <param name="MAS">целочисленный массив</param>
         /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
         /// <returns>отсортированный массив</returns>
-        public static int[] BubbleSort(int[] MAS, bool? vect = null)
+        public static int[] BubbleSort(int[] MAS, bool vect = false)
         {
-            switch (vect)
-            {
-                case true:    //сортировка по убыванию
+            for (int i = 0; i < MAS.Length; i++)
+                for (int j = 0; j < MAS.Length - i - 1; j++)
+                    if (MAS[j] > MAS[j + 1])
+                        Swap(MAS, j, j + 1);
 
-                    for (int i = 0; i < MAS.Length; i++)
-                        for (int j = 0; j < MAS.Length - i - 1; j++)
-                            if (MAS[j] < MAS[j + 1])
-                            {
-                                int temp = MAS[j];
-                                MAS[j] = MAS[j + 1];
-                                MAS[j + 1] = temp;
-                            }
-                    break;
-
-                case null:    //сортировка по возрастанию
-
-                    for (int i = 0; i < MAS.Length; i++)
-                        for (int j = 0; j < MAS.Length - i - 1; j++)
-                            if (MAS[j] > MAS[j + 1])
-                            {
-                                int temp = MAS[j];
-                                MAS[j] = MAS[j + 1];
-                                MAS[j + 1] = temp;
-                            }
-                    break;
-            }
+            if (vect)
+                Array.Reverse(MAS);
 
             return MAS;
         }
@@ -52,45 +43,25 @@ namespace ClassLibrarySort
         /// <param name="MAS">целочисленный массив</param>
         /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
         /// <returns>отсортированный массив</returns>
-        public static int[] InsertSort(int[] MAS, bool? vect = null)
+        public static int[] InsertSort(int[] MAS, bool vect = false)
         {
-            switch (vect)
+            for (int i = 1; i < MAS.Length; i++)
             {
-                case true:    //сортировка по убыванию
-
-                    for (int i = 1; i < MAS.Length; i++)
+                int key = MAS[i], check = 0;
+                for (int j = i - 1; j >= 0 && check == 0;)
+                    if (key < MAS[j])
                     {
-                        int key = MAS[i], check = 0;
-                        for (int j = i - 1; j >= 0 && check == 0;)
-                            if (key > MAS[j])
-                            {
-                                MAS[j + 1] = MAS[j];
-                                MAS[j] = key;
-                                j--;
-                            }
-                            else
-                                check++;
+                        MAS[j + 1] = MAS[j];
+                        MAS[j] = key;
+                        j--;
                     }
-                    break;
+                    else
+                        check++;
 
-                case null:    //сортировка по возрастанию
-
-                    for (int i = 1; i < MAS.Length; i++)
-                    {
-                        int key = MAS[i], check = 0;
-                        for (int j = i - 1; j >= 0 && check == 0;)
-                            if (key < MAS[j])
-                            {
-                                MAS[j + 1] = MAS[j];
-                                MAS[j] = key;
-                                j--;
-                            }
-                            else
-                                check++;
-
-                    }
-                    break;
             }
+
+            if (vect)
+                Array.Reverse(MAS);
 
             return MAS;
         }
@@ -102,14 +73,14 @@ namespace ClassLibrarySort
         /// <param name="low">начальный индекс</param>
         /// <param name="high">конечный индекс</param>
         /// <param name="vect">направление сортировки (true - по убыванию, false - по возрастанию)</param>
-        private static void Merge_Range(int[] MAS, int low, int high, bool vect)
+        private static void Merge_Range(int[] MAS, int low, int high)
         {
             if (high - low > 1)
             {
                 int left = low, l_mid = (low + high) / 2, r_mid = (low + high) / 2 + 1, right = high;
 
-                Merge_Range(MAS, left, l_mid, vect);
-                Merge_Range(MAS, r_mid, right, vect);
+                Merge_Range(MAS, left, l_mid);
+                Merge_Range(MAS, r_mid, right);
 
                 int[] temp_MAS = new int[high - low + 1];
 
@@ -121,8 +92,7 @@ namespace ClassLibrarySort
                 for (int i = low; i <= high; i++)
                     if (k <= l_mid && j <= right)
                     {
-                        bool condition = vect ? temp_MAS[k - low] > temp_MAS[j - low] : temp_MAS[k - low] < temp_MAS[j - low];
-                        if (condition)
+                        if (temp_MAS[k - low] < temp_MAS[j - low])
                             MAS[i] = temp_MAS[k++ - low];
                         else
                             MAS[i] = temp_MAS[j++ - low];
@@ -132,15 +102,11 @@ namespace ClassLibrarySort
                         MAS[i] = temp_MAS[j++ - low];
                     else
                         MAS[i] = temp_MAS[k++ - low];
-                }
+            }
 
             else if (high - low == 1)
-                if ((vect && MAS[low] < MAS[high]) || (!vect && MAS[low] > MAS[high]))
-                {
-                    int temp = MAS[low];
-                    MAS[low] = MAS[high];
-                    MAS[high] = temp;
-                }
+                if (MAS[low] > MAS[high])
+                    Swap(MAS, low, high);
         }
 
         /// <summary>
@@ -149,12 +115,12 @@ namespace ClassLibrarySort
         /// <param name="MAS">целочисленный массив</param>
         /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
         /// <returns>остортированный массив</returns>
-        public static int[] MergeSort(int[] MAS, bool? vect = null)
+        public static int[] MergeSort(int[] MAS, bool vect = false)
         {
-            bool vector = vect ?? false;
+            Merge_Range(MAS, 0, MAS.Length - 1);
 
-            Merge_Range(MAS, 0, MAS.Length - 1, vector);
-
+            if (vect)
+                Array.Reverse(MAS);
             return MAS;
         }
 
@@ -165,54 +131,27 @@ namespace ClassLibrarySort
         /// <param name="low">левая граница</param>
         /// <param name="high">правая граница</param>
         /// <param name="vect">направление сортировки (false - по возрастанию, true - по убыванию)</param>
-        private static void Quick_Range(int[] MAS, int low, int high, bool vect)
+        private static void Quick_Range(int[] MAS, int low, int high)
         {
-            if (!vect)
+            int left = low, right = high, middle = MAS[(left + right) / 2];
+
+            while (MAS[left] < middle)
+                left++;
+            while (MAS[right] > middle)
+                right--;
+
+            if (left <= right)
             {
-                int left = low, right = high, middle = MAS[(left + right) / 2];
-
-                while (MAS[left] < middle)
-                    left++;
-                while (MAS[right] > middle)
-                    right--;
-
-                if (left <= right)
-                {
-                    int temp = MAS[left];
-                    MAS[left] = MAS[right];
-                    MAS[right] = temp;
-                    left++;
-                    right--;
-                }
-
-                if (low < right)
-                    Quick_Range(MAS, low, right, vect);
-                if (left < high)
-                    Quick_Range(MAS, left, high, vect);
+                Swap(MAS, left, right);
+                left++;
+                right--;
             }
-            else
-            {
-                int left = low, right = high, middle = MAS[(left + right) / 2];
 
-                while (MAS[left] > middle)
-                    left++;
-                while (MAS[right] < middle)
-                    right--;
+            if (low < right)
+                Quick_Range(MAS, low, right);
+            if (left < high)
+                Quick_Range(MAS, left, high);
 
-                if (left <= right)
-                {
-                    int temp = MAS[left];
-                    MAS[left] = MAS[right];
-                    MAS[right] = temp;
-                    left++;
-                    right--;
-                }
-
-                if (low < right)
-                    Quick_Range(MAS, low, right, vect);
-                if (left < high)
-                    Quick_Range(MAS, left, high, vect);
-            }
         }
 
         /// <summary>
@@ -221,11 +160,12 @@ namespace ClassLibrarySort
         /// <param name="MAS">целочисленный массив</param>
         /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
         /// <returns>остортированный массив</returns>
-        public static int[] QuickSort(int[] MAS, bool? vect = null)
+        public static int[] QuickSort(int[] MAS, bool vect = false)
         {
-            bool vector = vect ?? false;
+            Quick_Range(MAS, 0, MAS.Length - 1);
 
-            Quick_Range(MAS, 0, MAS.Length - 1, vector);
+            if (vect)
+                Array.Reverse(MAS);
 
             return MAS;
         }
@@ -236,41 +176,147 @@ namespace ClassLibrarySort
         /// <param name="MAS">целочисленный массив</param>
         /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
         /// <returns>отсортированный массив</returns>
-        public static int[] CountSort(int[] MAS, bool? vect = null)
+        public static int[] CountSort(int[] MAS, bool vect = false)
         {
             int maxi = MAS.Max(), mini = MAS.Min();
-            int[] polnmas = new int[2 * maxi + 1];
+            int len = Math.Max(Math.Abs(mini), Math.Abs(maxi));
+            int[] polnmas = new int[2 * len + 1];
             int j;
-            switch (vect)
+
+            for (int i = 0; i < MAS.Length; i++)
+                polnmas[MAS[i] + len]++;
+
+            j = 0;
+            for (int i = mini; i <= maxi; i++)
+                for (int k = 0; k < polnmas[i + len]; k++)
+                {
+                    MAS[j] = i;
+                    j++;
+                }
+
+            if (vect)
+                Array.Reverse(MAS);
+
+            return MAS;
+        }
+
+        /// <summary>
+        /// Сортировка элементов двух типов
+        /// </summary>
+        /// <param name="MAS">целочисленный массив</param>
+        /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
+        /// <returns>отсортированный массив</returns>
+        public static int[] TwoSort(int[] MAS, bool vect = false)
+        {
+            int left = 0, right = MAS.Length - 1;
+
+            while (left < right)
             {
-                case true:
-                    for (int i = 0; i < MAS.Length; i++)
-                        polnmas[MAS[i] + maxi]++;
+                while (left < right && MAS[left] == MAS.Min())
+                    left++;
+                while (left < right && MAS[right] == MAS.Max())
+                    right--;
 
-                    j = MAS.Length - 1;
+                Swap(MAS, left, right);
+            }
 
-                    for (int i = mini; i <= maxi; i++)
-                        for (int k = 0; k < polnmas[i + maxi]; k++)
-                        {
-                            MAS[j] = i;
-                            j--;
-                        }
+            if (vect)
+                Array.Reverse(MAS);
 
-                    break;
+            return MAS;
+        }
 
-                case null:
-                    for (int i = 0; i < MAS.Length; i++)
-                        polnmas[MAS[i] + maxi]++;
+        /// <summary>
+        /// Сортировка элементов трёх типов
+        /// </summary>
+        /// <param name="MAS">целочисленный массив</param>
+        /// <param name="vect">направление сортировки (true - по убыванию, ничего - по возрастанию)</param>
+        /// <returns>отсортированный массив</returns>
+        public static int[] ThreeSort(int[] MAS, bool vect = false)
+        {
+            int[] uni = BubbleSort(MAS.ToList().Distinct().ToArray());
+            int low = uni.Min(), high = uni.Max(), middle = Math.Abs(uni.Sum() - low - high);
 
-                    j = 0;
-                    for (int i = mini; i <= maxi; i++)
-                        for (int k = 0; k < polnmas[i + maxi]; k++)
-                        {
-                            MAS[j] = i;
-                            j++;
-                        }
+            int left = 0;
+            int mid = 0;
+            int right = MAS.Length - 1;
 
-                    break;
+            while (mid <= right)
+            {
+                if (MAS[mid] == middle)
+                    mid++;
+                else if (MAS[mid] == high)
+                {
+                    Swap(MAS, mid, right);
+                    right--;
+                }
+                else
+                {
+                    Swap(MAS, left, mid);
+                    left++;
+                    mid++;
+                }
+            }
+
+            if (vect) 
+                Array.Reverse(MAS);
+
+            return MAS;
+        }
+
+        public static int[] FourSort(int[] MAS, bool vect = false)
+        {
+            int[] uni = BubbleSort(MAS.ToList().Distinct().ToArray());
+            int low, mid1, mid2, high;
+            if (uni.Length == 4)
+            {
+                low = uni[0];
+                mid1 = uni[1];
+                mid2 = uni[2];
+                high = uni[3];
+            }
+            else
+            {
+                low = uni.Min();
+                high = uni.Max();
+                mid1 = Math.Abs(uni.Sum() - low - high);
+                mid2 = mid1;
+            }
+
+            int left = 0;
+            int left_mid = 0;
+            int right_mid = MAS.Length - 1;
+            int right = MAS.Length - 1;
+            int cur = 0;
+
+            while (cur <= right_mid)
+            {
+                if (MAS[cur] == mid1)
+                    cur++;
+                else if (MAS[cur] == mid2)
+                {
+                    Swap(MAS, cur, right_mid);
+                    right_mid--;
+                }
+                else if (MAS[cur] == low)
+                {
+                    Swap(MAS, cur, left);
+                    left++;
+                    left_mid++;
+                    cur++;
+                }
+                else
+                {
+                    Swap(MAS, cur, right);
+
+                    if (right > right_mid)
+                    {
+                        Swap(MAS, cur, right_mid);
+                        right_mid--;
+                    }
+
+                    right--;
+                }
             }
 
             return MAS;
