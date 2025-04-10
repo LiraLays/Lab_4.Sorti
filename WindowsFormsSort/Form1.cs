@@ -96,41 +96,59 @@ namespace WindowsFormsSort
                         textBox3.Clear();
                         ClassSort.TwoSort(massive, vect);
                         int p = 0;
-                        foreach (var number in massive)
+                        int cnt_uniq2 = new HashSet<int>(massive).Count;
+                        if (cnt_uniq2 == 2)
                         {
-                            p++;
-                            if (p != massive.Length)
-                                textBox3.Text += String.Format("{0}, ", number);
-                            else
-                                textBox3.Text += String.Format("{0}", number);
+                            foreach (var number in massive)
+                            {
+                                p++;
+                                if (p != massive.Length)
+                                    textBox3.Text += String.Format("{0}, ", number);
+                                else
+                                    textBox3.Text += String.Format("{0}", number);
+                            }
                         }
+                        else
+                            MessageBox.Show("Количество уникальных чисел должно быть равно не больше 2", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     case "Cортировка элементов 3 типов":
                         textBox3.Clear();
                         ClassSort.ThreeSort(massive, vect);
-                        break;
+
                         int u = 0;
-                        foreach (var number in massive)
+                        int cnt_uniq3 = new HashSet<int>(massive).Count;                                              
+                        if (cnt_uniq3 == 3)
                         {
-                            u++;
-                            if (u != massive.Length)
-                                textBox3.Text += String.Format("{0}, ", number);
-                            else
-                                textBox3.Text += String.Format("{0}", number);
+                            foreach (var number in massive)
+                            {
+                                u++;
+                                if (u != massive.Length)
+                                    textBox3.Text += String.Format("{0}, ", number);
+                                else
+                                    textBox3.Text += String.Format("{0}", number);
+                            }
                         }
+                        else
+                            MessageBox.Show("Количество уникальных чисел должно быть равно не больше 3. На флаге России всего 3 цвета", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     case "Cортировка элементов 4 типов":
                         textBox3.Clear();
                         ClassSort.FourSort(massive, vect);
                         int r = 0;
-                        foreach (var number in massive)
+                        int cnt_uniq4 = new HashSet<int>(massive).Count;
+                        if (cnt_uniq4 == 4)
                         {
-                            r++;
-                            if (r != massive.Length)
-                                textBox3.Text += String.Format("{0}, ", number);
-                            else
-                                textBox3.Text += String.Format("{0}", number);
+                            foreach (var number in massive)
+                            {
+                                r++;
+                                if (r != massive.Length)
+                                    textBox3.Text += String.Format("{0}, ", number);
+                                else
+                                    textBox3.Text += String.Format("{0}", number);
+                            }
                         }
+                        else
+                            MessageBox.Show("Количество уникальных чисел должно быть равно не больше 4. В Хогвартсе всего 4 факультета", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
             }
@@ -147,6 +165,11 @@ namespace WindowsFormsSort
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
