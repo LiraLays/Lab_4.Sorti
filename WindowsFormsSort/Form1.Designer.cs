@@ -152,13 +152,14 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.checkBox1.ForeColor = System.Drawing.Color.SteelBlue;
             this.checkBox1.Location = new System.Drawing.Point(567, 215);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(244, 40);
             this.checkBox1.TabIndex = 10;
             this.checkBox1.Text = "По убыванию?";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.UseVisualStyleBackColor = false;
             // 
             // InfoButton
             // 
