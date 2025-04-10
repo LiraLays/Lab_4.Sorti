@@ -11,9 +11,9 @@ using ClassLibrarySort;
 
 namespace WindowsFormsSort
 {
-    public partial class Form1 : Form
+    public partial class FormSort : Form
     {
-        public Form1()
+        public FormSort()
         {
             InitializeComponent();
             comboBox2.Items.AddRange(new object[]
@@ -35,7 +35,7 @@ namespace WindowsFormsSort
         {
             try
             {
-                int[] massive = textBox2.Text.Split(',', ' ', ';').Select(int.Parse).ToArray();
+                int[] massive = textBox2.Text.Trim().Split(',', ' ', ';').Select(int.Parse).ToArray();
                 bool vect = checkBox1.Checked;
 
                 switch (comboBox2.SelectedItem.ToString())
@@ -94,11 +94,11 @@ namespace WindowsFormsSort
                         break;
                     case "Cортировка элементов 2 типов":
                         textBox3.Clear();
-                        ClassSort.TwoSort(massive, vect);
-                        int p = 0;
                         int cnt_uniq2 = new HashSet<int>(massive).Count;
                         if (cnt_uniq2 == 2)
                         {
+                            ClassSort.TwoSort(massive, vect);
+                            int p = 0;
                             foreach (var number in massive)
                             {
                                 p++;
@@ -113,12 +113,11 @@ namespace WindowsFormsSort
                         break;
                     case "Cортировка элементов 3 типов":
                         textBox3.Clear();
-                        ClassSort.ThreeSort(massive, vect);
-
-                        int u = 0;
                         int cnt_uniq3 = new HashSet<int>(massive).Count;                                              
                         if (cnt_uniq3 == 3)
                         {
+                            ClassSort.ThreeSort(massive, vect);
+                            int u = 0;
                             foreach (var number in massive)
                             {
                                 u++;
@@ -133,11 +132,11 @@ namespace WindowsFormsSort
                         break;
                     case "Cортировка элементов 4 типов":
                         textBox3.Clear();
-                        ClassSort.FourSort(massive, vect);
-                        int r = 0;
                         int cnt_uniq4 = new HashSet<int>(massive).Count;
                         if (cnt_uniq4 == 4)
                         {
+                            ClassSort.FourSort(massive, vect);
+                            int r = 0;
                             foreach (var number in massive)
                             {
                                 r++;
@@ -167,9 +166,20 @@ namespace WindowsFormsSort
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void InfoButton_Click(object sender, EventArgs e)
         {
-            
+            InfoForm infoForm = new InfoForm();
+            infoForm.ShowDialog();
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
